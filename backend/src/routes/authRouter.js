@@ -3,6 +3,7 @@ const router = express.Router();
 import bycrypt from "bcryptjs";
 import db from "../db.js";
 import jwt from "jsonwebtoken";
+import authenticateToken from "../middleware/authenticateToken.js";
 
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
@@ -77,5 +78,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
 
 export default router;

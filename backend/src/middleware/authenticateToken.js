@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+
 // the authentication middleware
 function authenticateToken(req, res, next) {
   // Get the token from the 'Authorization' header
@@ -19,7 +21,8 @@ function authenticateToken(req, res, next) {
 
     // Token is valid! Attach the user payload to the request
     req.user = user;
-    next(); // Move on to the next function (the route handler)
+    // Move on to the the route handler
+    next(); 
   });
 }
 
