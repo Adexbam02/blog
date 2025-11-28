@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 // the authentication middleware
 function authenticateToken(req, res, next) {
@@ -18,11 +18,13 @@ function authenticateToken(req, res, next) {
       // Token is invalid...expired, wrong secret
       return res.status(403).json({ message: "Invalid or expired token" });
     }
+    // console.log("Auth header:", authHeader);
+    // console.log("Decoded user:", user);
 
     // Token is valid! Attach the user payload to the request
     req.user = user;
     // Move on to the the route handler
-    next(); 
+    next();
   });
 }
 
