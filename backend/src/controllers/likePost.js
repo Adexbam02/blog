@@ -1,34 +1,43 @@
 import db from "../db.js";
 
 export const likePost = (req, res) => {
-const userId = req.user?.id || 1;
-  const postId = req.params.id;
-
-   console.log("🧠 Like request:", { userId, postId });
-
-  if (!userId) {
-    return res.status(401).json({ error: "Login required to like posts" });
-  }
-
   try {
-    // Check if already liked
-    const alreadyLiked = db
-      .prepare("SELECT 1 FROM likes WHERE user_id = ? AND post_id = ?")
-      .get(userId, postId);
+    const userId = req.user.userId;
+    const { postId } = req.params;
 
-    if (alreadyLiked) {
-      return res.status(400).json({ message: "You already liked this post" });
+    // Check if post exists
+    const post = db.prepare("SELECT id FROM posts WHERE id = ?").get(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    // Insert like
-    db.prepare("INSERT INTO likes (user_id, post_id) VALUES (?, ?)").run(
-      userId,
-      postId
-    );
+    // Insert into likes table
+    const insertLike = db.prepare(`
+      INSERT INTO likes (user_id, post_id)
+      VALUES (?, ?)
+    `);
 
-    res.status(200).json({ message: "Post liked successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    try {
+      insertLike.run(userId, postId);
+    } catch (error) {
+      if (error.message.includes("UNIQUE")) {
+        return res.status(400).json({ message: "You already liked this post" });
+      }
+      throw error;
+    }
+
+    // increment post like count
+    db.prepare(`
+      UPDATE posts
+      SET likes = likes + 1
+      WHERE id = ?
+    `).run(postId);
+
+    return res.json({ message: "Post liked successfully" });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Something went wrong" });
   }
 };

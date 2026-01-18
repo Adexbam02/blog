@@ -1,7 +1,6 @@
 import express from "express";
 import db from "../db.js";
 import authenticateToken from "../middleware/authenticateToken.js";
-import path from "path";
 import { getAllPosts } from "../controllers/getAllPosts.js";
 import { createPost } from "../controllers/createPost.js";
 import { getPostBySlug } from "../controllers/getPostBySlug.js";
@@ -11,6 +10,11 @@ import { unLikePost } from "../controllers/unLikePost.js";
 import { countLikes } from "../controllers/countLikes.js";
 import { checkLike } from "../controllers/checkLike.js";
 import { deletePost } from "../controllers/deletePost.js";
+import { mostLike } from "../controllers/mostLike.js";
+import { editPost } from "../controllers/editPost.js";
+import { commentOnPost } from "../controllers/commentOnPost.js";
+import { getCommentsByPostId } from "../controllers/getCommentsByPostId.js";
+import { deleteComment } from "../controllers/deleteComment.js";
 
 const router = express.Router();
 
@@ -20,36 +24,37 @@ router.post("/", authenticateToken, createPost);
 // DELETE delete post
 router.delete("/:id", authenticateToken, deletePost);
 
-// GET all post
+// GET all posts
 router.get("/", getAllPosts);
 
-// GET post by author and slug
-router.get("/:author/:slug", getPostBySlug);
+// Like routes (specific paths)
+router.post("/like/:postId", authenticateToken, likePost);
+router.delete("/like/:postId", authenticateToken, unLikePost);
 
-router.get("/:author", getAllPostsByAuthor);
+// Count likes for a post (specific path)
+router.get("/:postId/likes", countLikes);
 
-// Like a post
-// router.post("/posts/:id/like", likePost);
+// Optional: Route by slug
+router.get("/slug/:slug/likes", countLikes);
 
-// Unlike a post
-// router.delete("/posts/:id/like", unLikePost);
+router.get("/:postId/liked", authenticateToken, checkLike);
 
-// count likes for a post
-// router.get("/posts/:id/likes", countLikes)
+router.get("/most-liked", mostLike);
 
-router.get("/:id/liked", checkLike);
+router.patch("/edit-post/:postId", authenticateToken, editPost);
 
-router.post("/:id/like", authenticateToken, likePost);
-router.delete("/:id/like", authenticateToken, unLikePost);
-router.get("/:id/likes", countLikes);
+router.post("/comment/:postId", authenticateToken, commentOnPost);
 
+router.get("/comments/:postId", getCommentsByPostId);
+
+router.delete('/comment/:commentId',authenticateToken, deleteComment)
+
+// Get posts by username - MOVE THIS DOWN
 router.get("/:username", (req, res) => {
-  const {username} = req.params
+  const { username } = req.params;
   try {
     const posts = db
-      .prepare(
-        "SELECT * FROM posts WHERE username = ? ORDER BY created_at DESC"
-      )
+      .prepare("SELECT * FROM posts WHERE author = ? ORDER BY created_at DESC")
       .all(username);
     res.status(200).json(posts);
   } catch (error) {
@@ -57,5 +62,11 @@ router.get("/:username", (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Get all posts by author (already generic)
+router.get("/:author", getAllPostsByAuthor);
+
+// Get post by author and slug (most generic - must be last)
+router.get("/:author/:slug", getPostBySlug);
 
 export default router;

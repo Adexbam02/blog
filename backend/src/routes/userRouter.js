@@ -10,8 +10,9 @@ import { unfollowUser } from "../controllers/unfollowUser.js";
 import { getFollowingStatus } from "../controllers/following.js";
 
 router.patch("/edit", authenticateToken, editProfile);
-router.get("/me", authenticateToken, getUserProfile);
+// router.get("/me", authenticateToken, getUserProfile);
 router.get("/profile/:username", getUserProfilePublic);
+router.get("/profile/profile/:username", getUserProfile);
 
 router.post("/follow/:username", authenticateToken, followUser);
 router.post("/unfollow/:username", authenticateToken, unfollowUser);
