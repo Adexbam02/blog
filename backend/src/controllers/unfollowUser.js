@@ -19,6 +19,13 @@ export const unfollowUser = (req, res) => {
       WHERE follower_id = ? AND following_id = ?
     `);
 
+    db.prepare(
+      `
+  INSERT INTO unfollows (follower_id, following_id)
+  VALUES (?, ?)
+`
+    ).run(followerId, targetUser.id);
+
     const result = stmt.run(followerId, targetUser.id);
 
     if (result.changes === 0) {
@@ -26,7 +33,6 @@ export const unfollowUser = (req, res) => {
     }
 
     return res.json({ message: "Unfollowed successfully" });
-
   } catch {
     return res.status(500).json({ message: "Something went wrong" });
   }

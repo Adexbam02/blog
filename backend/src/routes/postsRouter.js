@@ -15,6 +15,10 @@ import { editPost } from "../controllers/editPost.js";
 import { commentOnPost } from "../controllers/commentOnPost.js";
 import { getCommentsByPostId } from "../controllers/getCommentsByPostId.js";
 import { deleteComment } from "../controllers/deleteComment.js";
+import { postView } from "../controllers/postViews.js";
+import { getViewCount } from "../controllers/getViewCount.js";
+import { optionalAuth } from "../middleware/optionalAuth.js";
+import { getUserTotalViewsInLastOneHr } from "../controllers/getUserViewGrowthToday.js";
 
 const router = express.Router();
 
@@ -47,7 +51,12 @@ router.post("/comment/:postId", authenticateToken, commentOnPost);
 
 router.get("/comments/:postId", getCommentsByPostId);
 
-router.delete('/comment/:commentId',authenticateToken, deleteComment)
+router.delete("/comment/:commentId", authenticateToken, deleteComment);
+
+router.post("/views/:postId", optionalAuth, postView);
+router.get("/views/:postId", getViewCount);
+// router.get("/views/:userId", getUserTotalViews);
+// router.get("/views/growth/:postId", getUserTotalViewsInLastOneHr);
 
 // Get posts by username - MOVE THIS DOWN
 router.get("/:username", (req, res) => {

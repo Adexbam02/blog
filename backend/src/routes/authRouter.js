@@ -63,7 +63,7 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       { userId: user.id, username: user.username }, // This is the payload (info inside the token)
-      process.env.JWT_SECRET, // This is your secret key
+      process.env.JWT_SECRET, // This is the secret key
       { expiresIn: "1h" } // The token expires in 1 hour
     );
 
@@ -71,7 +71,7 @@ router.post("/login", async (req, res) => {
     return res.status(200).json({
       message: "Login successful",
       username: user.username,
-      token: token, // <-- Add the token to the response
+      token: token, 
     });
   } catch (error) {
     console.error("Error logging in user:", error);

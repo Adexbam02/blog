@@ -41,6 +41,32 @@ db.exec(`
 `);
 
 db.exec(`
+  CREATE TABLE IF NOT EXISTS post_views (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER NOT NULL,
+    user_id INTEGER,
+    visitor_id TEXT,
+    viewed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CHECK (
+      (user_id IS NOT NULL AND visitor_id IS NULL)
+      OR
+      (user_id IS NULL AND visitor_id IS NOT NULL)
+    ),
+
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+`);
+
+db.prepare(
+  `
+  CREATE INDEX IF NOT EXISTS idx_post_views_post_time
+  ON post_views(post_id, viewed_at)
+`
+).run();
+
+db.exec(`
  CREATE TABLE IF NOT EXISTS likes (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
@@ -64,6 +90,19 @@ db.exec(`
     FOREIGN KEY (following_id) REFERENCES users(id)
   );
 `);
+
+db.exec(`
+   CREATE TABLE IF NOT EXISTS unfollows (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    follower_id INTEGER NOT NULL,
+    following_id INTEGER NOT NULL,
+    unfollowed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (follower_id) REFERENCES users(id),
+    FOREIGN KEY (following_id) REFERENCES users(id),
+    UNIQUE (follower_id, following_id)
+  );
+`);
+
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS comments  (
