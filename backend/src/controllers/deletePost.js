@@ -4,6 +4,8 @@ export const deletePost = (req, res) => {
   const postId = req.params.id; // Get the post ID from the URL
   const userId = req.user?.userId; // Get the logged-in user's ID from the token
 
+    console.log("Delete Post Request:", { postId, userId });
+
   try {
     if (!userId) {
       return res.status(401).json({ error: "User not authenticated" });

@@ -138,7 +138,7 @@ function Page() {
   };
 
   return (
-    <div className=" md:min-h-screen md:px-[150px] md:py-8 flex justify-center overflow-hidden">
+    <div className=" md:min-h-screen md:px-[150px] md:py-8 flex justify-center overflow-hidden bg-[#242535]">
       <form className="w-full px-[30px]" onSubmit={publishPost}>
         <textarea
           onChange={(e) => setPublish({ ...publish, title: e.target.value })}
@@ -154,14 +154,14 @@ function Page() {
             Write your story...
           </h2>
 
-          <div className="w-full min-h-[450px] max-h-[400px] bg-[#181A2A] outline-none border-b-2  border-[#e0e1e5]/20 pb-5">
+          <div className="w-full min-h-[450px] max-h-[400px] bg-[181A2A] outline-none border-b-2  border-[#e0e1e5]/20 pb-5">
             <ReactQuill
               theme="snow"
               modules={modules}
               formats={formats}
               value={publish.content}
               onChange={(value) => setPublish({ ...publish, content: value })}
-              className="custom-quill w-full max-h-full text-white text-[18px] "
+              className="custom-quill w-full h-screen text-white text-[18px] "
             />
           </div>
         </div>

@@ -19,6 +19,7 @@ import { postView } from "../controllers/postViews.js";
 import { getViewCount } from "../controllers/getViewCount.js";
 import { optionalAuth } from "../middleware/optionalAuth.js";
 import { getUserTotalViewsInLastOneHr } from "../controllers/getUserViewGrowthToday.js";
+import { draftedPost } from "../controllers/draftedPost.js";
 
 const router = express.Router();
 
@@ -55,6 +56,8 @@ router.delete("/comment/:commentId", authenticateToken, deleteComment);
 
 router.post("/views/:postId", optionalAuth, postView);
 router.get("/views/:postId", getViewCount);
+
+router.put("/draft", authenticateToken, draftedPost);
 // router.get("/views/:userId", getUserTotalViews);
 // router.get("/views/growth/:postId", getUserTotalViewsInLastOneHr);
 

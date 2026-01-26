@@ -36,7 +36,7 @@ function Headers() {
           </p>
 
           <div className="flex items-center justify-center gap-11 mt-10">
-            <Button content="Request a demo" />
+            <Button content="Start writing" />
             <Button content="Explore the platform" />
           </div>
         </section>

@@ -1,4 +1,5 @@
 "use client";
+import { truncateText } from "@/utils/truncateText";
 import { Post1, User } from "../../public/imgs/imgs";
 import Image from "next/image";
 import Link from "next/link";
@@ -61,10 +62,9 @@ export default function LatestPost() {
             ...post,
             profile_picture_url: user?.profile_picture_url || null,
           };
-        })
+        }),
       );
       setPosts(postsWithProfiles);
-      
     };
 
     loadPostsWithProfiles();
@@ -80,7 +80,7 @@ export default function LatestPost() {
             posts.map((post) => (
               <Link
                 href={`/${post.author.toLowerCase()}/${encodeURIComponent(
-                  post.slug.toLowerCase().replace(/\s+/g, "-")
+                  post.slug.toLowerCase().replace(/\s+/g, "-"),
                 )}`}
                 key={post.id}
                 className="max-w-[339px] min-w-[339px] max-h-[432px] min-h-[432px] bg-[#181A2A] border border-[#242535] rounded-[12px] flex flex-col items-start overflow-hidden p-[16px]"
@@ -100,7 +100,8 @@ export default function LatestPost() {
                   </h3>
 
                   <h1 className="font-semibold text-[24px] text-white leading-[100%] max-w-[300px]">
-                    {post.title}
+                    {truncateText(post.title, 50)}
+                    {/* {post.title} */}
                   </h1>
 
                   <div className="mt-[8px] flex items-center justify-between w-full flex-nowrap">

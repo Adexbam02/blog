@@ -15,6 +15,8 @@ if (!fs.existsSync(dataDir)) {
 const dbPath = join(dataDir, "database.sqlite");
 const db = new DatabaseSync(dbPath);
 
+db.exec("PRAGMA foreign_keys = ON;");
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,14 +37,16 @@ db.exec(`
     img_url TEXT NOT NULL,
     slug TEXT NOT NULL UNIQUE,
     likes INTEGER DEFAULT 0, 
+    status TEXT CHECK(status IN ('draft', 'published')) NOT NULL DEFAULT 'draft',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
 `);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS post_views (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
     post_id INTEGER NOT NULL,
     user_id INTEGER,
     visitor_id TEXT,
@@ -53,9 +57,8 @@ db.exec(`
       OR
       (user_id IS NULL AND visitor_id IS NOT NULL)
     ),
-
-    FOREIGN KEY (post_id) REFERENCES posts(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   );
 `);
 
@@ -63,7 +66,7 @@ db.prepare(
   `
   CREATE INDEX IF NOT EXISTS idx_post_views_post_time
   ON post_views(post_id, viewed_at)
-`
+`,
 ).run();
 
 db.exec(`
@@ -74,7 +77,8 @@ db.exec(`
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(user_id, post_id),
   FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (post_id) REFERENCES posts(id)
+  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+
 );
 
 `);
@@ -103,7 +107,6 @@ db.exec(`
   );
 `);
 
-
 db.exec(`
   CREATE TABLE IF NOT EXISTS comments  (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -112,7 +115,7 @@ db.exec(`
     content TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (post_id) REFERENCES posts(id)
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
   );
 `);
 
