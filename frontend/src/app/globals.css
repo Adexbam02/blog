@@ -47,29 +47,34 @@
 /* Remove all borders */
 .ql-toolbar,
 .ql-container {
-  border: none !important;
-  box-shadow: none !important;
+  /* border: none !important;
+  box-shadow: none !important; */
 }
 
 /* Toolbar styling */
 .ql-toolbar {
-  background: #12121a !important;
+  /* background: #12121a !important; */
+  border: none !important;
 }
 
 /* Editor container */
 .ql-container {
-  background: #181a2a !important;
+  /* background: #181a2a !important; */
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  border-width: 1.5px !important;
+  margin-top: 20px !important;
   height: 100% !important;
   max-height: 400px !important;
 }
 
 /* The main editable area */
 .ql-editor {
-  color: #ffffff !important;
+  color: #000000 !important;
   font-size: 16px;
   line-height: 1.6;
   height: 100% !important;
-  max-height: 400px !important;
+  /* max-height: 400px !important; */
   overflow-y: auto !important;
   overflow-x: hidden !important;
   word-wrap: break-word;

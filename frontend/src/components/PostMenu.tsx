@@ -2,18 +2,26 @@
 import { useState } from "react";
 import { Ellipsis, Trash, PenLine } from "lucide-react";
 
+
 const delePost = async (id: number) => {
   try {
     const res = await fetch(`http://localhost:5000/posts/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
-    if (!res.ok) throw new Error("Failed to delete post");
+
+    const data = await res.json();
+    console.log("Status:", res.status);
+    console.log("Response:", data);
+
+    if (!res.ok) throw new Error(data.error || "Failed to delete post");
+
     console.log("Post deleted!");
   } catch (error) {
     console.error(error);
   }
 };
+
 
 export default function PostMenu({ postId }: { postId: number }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +35,7 @@ export default function PostMenu({ postId }: { postId: number }) {
           trash ? "flex" : "hidden"
         }`}
       >
-        <div className="bg-[#181A2A] w-[500px] h-[200px] rounded-2xl p-[20px] flex items-center justify-center">
+        <div className="bg-[#181A2A] w-[500px] h-[200px] rounded-2xl p-5 flex items-center justify-center">
           <Trash size={150} strokeWidth={0.5} className="mr-4" />
           <div className="flex flex-col justify-between h-full">
             <h2 className="font-semibold text-[30px] mb-4 leading-[120%]">
@@ -39,14 +47,14 @@ export default function PostMenu({ postId }: { postId: number }) {
                   delePost(postId);
                   setTrash(false);
                 }}
-                className="bg-red-500 rounded-[8px] text-white px-4 py-2 hover:bg-red-600 w-full cursor-pointer flex items-center justify-center gap-3.5"
+                className="bg-red-500 rounded-lg text-white px-4 py-2 hover:bg-red-600 w-full cursor-pointer flex items-center justify-center gap-3.5"
               >
                 <Trash />
                 {/* <p>Delete</p> */}
               </button>
               <button
                 onClick={() => setTrash(false)}
-                className="bg-[#242535] rounded-[8px] text-white px-4 py-2 hover:bg-[#343a40] w-full cursor-pointer"
+                className="bg-[#242535] rounded-lg text-white px-4 py-2 hover:bg-[#343a40] w-full cursor-pointer"
               >
                 Cancel
               </button>

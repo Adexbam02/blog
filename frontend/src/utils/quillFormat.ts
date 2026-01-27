@@ -24,7 +24,7 @@ const formats = [
   "color",
   "background",
   "link",
-  // "image",
+  "image",
 ];
 
 export { modules, formats };

@@ -5,6 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
 import { modules, formats } from "../../utils/quillFormat";
+import NavbarCopy from "@/components/NavbarCopy";
+import NavbarWrite from "@/components/NavbarWrite";
 
 type DecodedToken = {
   id: number;
@@ -88,7 +90,7 @@ function Page() {
           {
             method: "POST",
             body: cloudFormData,
-          }
+          },
         );
 
         const cloudData = await cloudRes.json();
@@ -138,33 +140,33 @@ function Page() {
   };
 
   return (
-    <div className=" md:min-h-screen md:px-[150px] md:py-8 flex justify-center overflow-hidden bg-[#242535]">
-      <form className="w-full px-[30px]" onSubmit={publishPost}>
+    <div className=" md:min-h-screen md:px-[150p] md:py-8 flex justify-center overflow-hidden bg-[242535] flex-col md:grid grid-cols-5">
+      {/* <NavbarWrite /> */}
+      <div className="bg-gray-400">a</div>
+      <form className="w-full px-[30px] md:col-span-3" onSubmit={publishPost}>
         <textarea
           onChange={(e) => setPublish({ ...publish, title: e.target.value })}
           value={publish.title}
           name="title"
           placeholder="Title"
-          className="min-w-full max-h-[100px] text-white text-[40px] p-[25px] outline-none border-b-2 bg-[181A2A] border-[#e0e1e5]/20 overflow-hidden resize-none leading-[100%]"
+          className="min-w-full max-h-[100px] text-[40px] p-[25px] outline-none border-b-2 bg-[181A2A] 
+          border-[#e0e1e5]/20 overflow-hidden resize-none leading-[100%] placeholder:text-gray-500"
           required
         ></textarea>
 
-        <div className="mt-5 flex items-start justify-start w-full gap-0">
-          <h2 className="text-white/50 text-[18px] font-medium whitespace-nowrap origin-left rotate-90 translate-y-0">
-            Write your story...
-          </h2>
-
-          <div className="w-full min-h-[450px] max-h-[400px] bg-[181A2A] outline-none border-b-2  border-[#e0e1e5]/20 pb-5">
-            <ReactQuill
-              theme="snow"
-              modules={modules}
-              formats={formats}
-              value={publish.content}
-              onChange={(value) => setPublish({ ...publish, content: value })}
-              className="custom-quill w-full h-screen text-white text-[18px] "
-            />
-          </div>
+        {/* <div className="mt-5 flex items-start justify-start w-full gap-0"> */}
+        <div className="w-full min-h-[450px] max-h-[400px] bg-[181A2A] outline-none border-b-2  border-[#e0e1e5]/20 pb-5">
+          <ReactQuill
+            theme="snow"
+            modules={modules}
+            formats={formats}
+            value={publish.content}
+            onChange={(value) => setPublish({ ...publish, content: value })}
+            placeholder="Write your story..."
+            className="custom-quill w-full h-screen text-white text-[18px] bg-white"
+          />
         </div>
+        {/* </div> */}
 
         <input
           type="hidden"
@@ -208,6 +210,7 @@ function Page() {
           </button>
         </div>
       </form>
+      <div className="bg-black h-screen">b</div>
     </div>
   );
 }

@@ -26,6 +26,10 @@ function authenticateToken(req, res, next) {
     // Move on to the the route handler
     next();
   });
+
+  console.log("Cookies:", req.cookies);
+console.log("User:", req.user);
+
 }
 
 export default authenticateToken;
