@@ -123,7 +123,7 @@ function Navbar() {
                   Signed in as <b>{decodedUser.username}</b>
                 </p>
                 <Link
-                  href="/edit-profile"
+                  href={`/${decodedUser.username}`}
                   className="bg-[#242535] text-white rounded-[5px] px-4 py-2 hover:bg-[#343a40]"
                 >
                   My Profile

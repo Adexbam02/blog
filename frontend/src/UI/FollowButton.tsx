@@ -2,7 +2,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function FollowButton({ username }: { username: string }) {
+export default function FollowButton({
+  username,
+  className,
+}: {
+  username: string;
+  className?: string;
+}) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +31,7 @@ export default function FollowButton({ username }: { username: string }) {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (res.ok) {
@@ -52,7 +58,7 @@ export default function FollowButton({ username }: { username: string }) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     if (res.ok) setIsFollowing(true);
@@ -69,7 +75,7 @@ export default function FollowButton({ username }: { username: string }) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     if (res.ok) setIsFollowing(false);
@@ -89,6 +95,7 @@ export default function FollowButton({ username }: { username: string }) {
       onClick={isFollowing ? handleUnfollow : handleFollow}
       className={`shrink-0 border border-gray-100/10 text-white py-2 px-4 rounded-full transition cursor-pointer hover:bg-blue-500/20
         ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}
+        ${className ?? ""}
       `}
     >
       {!isLoggedIn ? "Login to follow" : isFollowing ? "Following" : "Follow"}

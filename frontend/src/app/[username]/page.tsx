@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { truncateText } from "@/utils/truncateText";
+import FollowButton from "@/UI/FollowButton";
 type UserProfile = {
   username: string;
   email: string;
@@ -28,9 +29,26 @@ export default function UserProfilePage() {
   const [following, setFollowing] = useState<number>(0);
   const [followers, setFollowers] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInUsername, setLoggedInUsername] = useState<string | null>(null);
 
   const username = params.username;
   console.log(params);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setIsLoggedIn(true);
+      setLoggedInUsername(payload.username);
+    } catch {
+      setIsLoggedIn(false);
+      setLoggedInUsername(null);
+    }
+  }, []);
+
   useEffect(() => {
     async function fetchProfile() {
       try {
@@ -110,7 +128,25 @@ export default function UserProfilePage() {
                 <p>{profile.email}</p>
               </div>
 
-              <button>Edit Profile | Follow</button>
+              {/* <button>Edit Profile | Follow</button> */}
+              <div>
+                {!isLoggedIn && null}
+
+                {isLoggedIn && loggedInUsername === profile.username && (
+                  <Link href="/edit-profile">
+                    <button className="border border-white bg-black text-white cursor-pointer hover:bg-black/80 px-4 py-1 ">
+                      Edit Profile
+                    </button>
+                  </Link>
+                )}
+
+                {isLoggedIn && loggedInUsername !== profile.username && (
+                  <FollowButton
+                    className="bg-amber-500 text-black border-black/30 border-2 px-6 py-1"
+                    username={profile.username}
+                  />
+                )}
+              </div>
             </div>
 
             <p className="my-5 font-semibold">{profile.bio}</p>
