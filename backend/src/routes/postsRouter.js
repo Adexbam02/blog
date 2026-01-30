@@ -51,7 +51,7 @@ router.patch("/edit-post/:postId", authenticateToken, editPost);
 
 router.post("/comment/:postId", authenticateToken, commentOnPost);
 
-router.get("/comments/:postId", getCommentsByPostId);
+router.get("/comment/:postId", getCommentsByPostId);
 
 router.delete("/comment/:commentId", authenticateToken, deleteComment);
 

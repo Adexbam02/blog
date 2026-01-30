@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { truncateText } from "@/utils/truncateText";
 import FollowButton from "@/UI/FollowButton";
+import { timeAgo } from "@/utils/timeAgo";
 type UserProfile = {
   username: string;
   email: string;
@@ -19,6 +20,7 @@ type UserProfile = {
     content: string;
     category: string;
     img_url: string | null;
+    likes: number;
     created_at: string;
   }[];
 };
@@ -91,6 +93,8 @@ export default function UserProfilePage() {
 
   if (!profile)
     return <p className="text-center mt-10 text-red-500">User not found</p>;
+
+  const stripHtml = (html: string) => html.replace(/<[^>]*>?/gm, "");
 
   return (
     <div className="grid grid-cols-4">
@@ -173,35 +177,43 @@ export default function UserProfilePage() {
               <Link
                 key={post.id}
                 href={`/${profile.username}/${post.slug}`}
-                className="w-full p-5 border-b border-black/30 flex flex-row-reverse justify-between"
+                className="w-full p-5 border-b border-black/30 flex flex-col justify-between"
               >
-                {post.img_url && (
-                  <div className="w-[30%] h-[130px] shrink-0 overflow-hidden mb-3">
-                    <Image
-                      src={post.img_url}
-                      alt={post.title}
-                      width={600}
-                      height={400}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                )}
+                <div className="w-full flex flex-row-reverse justify-between gap-2">
+                  {post.img_url && (
+                    <div className="w-[30%] h-[130px] shrink-0 overflow-hidden mb-3">
+                      <Image
+                        src={post.img_url}
+                        alt={post.title}
+                        width={600}
+                        height={400}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  )}
 
-                <div className="flex flex-col items-start gap-5">
-                  <h3 className="text-[30px] leading-[120%] text-wrap  font-semibold">
-                    {truncateText(post.title, 50)}
-                    {/* {post.title} */}
-                  </h3>
-                  <p className="text-gray-500">
-                    {truncateText(post.content, 100)}
-                  </p>
-                  <div className="flex gap-3">
+                  <div className="flex flex-col items-start gap-2">
+                    <h3 className="text-[30px] leading-[120%] text-wrap  font-semibold">
+                      {truncateText(post.title, 50)}
+                      {/* {post.title} */}
+                    </h3>
+                    <p className="text-gray-500">
+                      {stripHtml(truncateText(post.content, 120))}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex  items-center  gap-5">
+                  <div className="flex gap-3 items-center">
                     <p className="text-gray-500 text-sm">
-                      {new Date(post.created_at).toLocaleDateString()}
+                      {timeAgo(post.created_at)}
+                      {/* {new Date(post.created_at).toLocaleDateString()} */}
                     </p>
                     <p className=" bg-white rounded text-sm font-medium">
                       {post.category}
                     </p>
+                    <p>{post.likes} Likes</p>
+                    <p>Comments</p>
                   </div>
                 </div>
               </Link>

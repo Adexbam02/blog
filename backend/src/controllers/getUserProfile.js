@@ -25,6 +25,7 @@ export const getUserProfile = (req, res) => {
         posts.category,
         posts.content,
         posts.img_url,
+        posts.likes,
         posts.created_at,
         COUNT(likes.id) AS like_count
       FROM posts
