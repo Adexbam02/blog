@@ -23,6 +23,7 @@ export const getUserProfile = (req, res) => {
         posts.slug,
         posts.title,
         posts.category,
+        posts.content,
         posts.img_url,
         posts.created_at,
         COUNT(likes.id) AS like_count
@@ -41,7 +42,8 @@ export const getUserProfile = (req, res) => {
       email: user.email,
       bio: user.bio,
       profile_picture_url: user.profile_picture_url,
-      posts: posts
+      banner_picture_url: user.banner_picture_url,
+      posts: posts,
     });
   } catch (error) {
     console.error("Error fetching user profile:", error);

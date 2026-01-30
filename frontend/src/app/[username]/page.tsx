@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-
+import { truncateText } from "@/utils/truncateText";
 type UserProfile = {
   username: string;
   email: string;
@@ -15,6 +15,7 @@ type UserProfile = {
     id: number;
     slug: string;
     title: string;
+    content: string;
     category: string;
     img_url: string | null;
     created_at: string;
@@ -24,6 +25,8 @@ type UserProfile = {
 export default function UserProfilePage() {
   const params = useParams<{ username: string }>();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [following, setFollowing] = useState<number>(0);
+  const [followers, setFollowers] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   const username = params.username;
@@ -45,7 +48,24 @@ export default function UserProfilePage() {
       }
     }
 
+    async function fetchFollowing() {
+      try {
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const res = await fetch(`${apiUrl}/user/profile/${username}`);
+
+        if (!res.ok) throw new Error("User not found");
+        const data = await res.json();
+        setFollowers(data.followers);
+        setFollowing(data.following);
+        console.log("FOLLOWING DATA", data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    }
+
     fetchProfile();
+    fetchFollowing();
   }, [username]);
 
   if (loading)
@@ -95,9 +115,16 @@ export default function UserProfilePage() {
 
             <p className="my-5 font-semibold">{profile.bio}</p>
           </div>
+
+          <div className="flex w-full gap-3 px-6 font-semibold mb-10">
+            <p>{followers} Followers</p>
+            <p>{following} Following</p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-6"></div>
+        <button className="flex px-6 cursor-pointer border-b border-black/50 py-2 hover:bg-black/10  transaition-all ease-in-out duration-300 ">
+          Posts
+        </button>
 
         {/* Divider */}
         <div className="h-px bg-gray-300 my10" />
@@ -126,14 +153,20 @@ export default function UserProfilePage() {
 
                 <div className="flex flex-col items-start gap-5">
                   <h3 className="text-[30px] leading-[120%] text-wrap  font-semibold">
-                    {post.title}
+                    {truncateText(post.title, 50)}
+                    {/* {post.title} */}
                   </h3>
-                  <p className="text-gray-500 text-sm">
-                    {new Date(post.created_at).toLocaleDateString()}
+                  <p className="text-gray-500">
+                    {truncateText(post.content, 100)}
                   </p>
-                  <p className="mt-1 p-1 bg-white rounded text-sm font-medium">
-                    {post.category}
-                  </p>
+                  <div className="flex gap-3">
+                    <p className="text-gray-500 text-sm">
+                      {new Date(post.created_at).toLocaleDateString()}
+                    </p>
+                    <p className=" bg-white rounded text-sm font-medium">
+                      {post.category}
+                    </p>
+                  </div>
                 </div>
               </Link>
             ))}

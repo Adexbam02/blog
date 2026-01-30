@@ -172,57 +172,8 @@ export default function EditProfilePage() {
     <div className="grid grid-cols-4">
       <div>a</div>
       <div className="w-full mx-auo mt10  bg-blac col-span-2 border-x border-black/30 h-screen">
-        <div>
-          <div className="flex flex-col relative">
-            <div className="w-full h-[200px] relative bg-black">
-              {formData.banner_picture_url && (
-                <Image
-                  src={formData.banner_picture_url}
-                  alt="Banner"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              )}
-            </div>
-
-            <div className="w-[135px] h-[135px] rounded-md border-2 border-black/30 absolute left-6 bottom-[-60px] bg-black overflow-hidden ">
-              <Image
-                src={formData.profile_picture_url || "/default-profile.png"}
-                alt="Profile Picture"
-                fill
-                className="object-cover object-center"
-                priority
-              />
-            </div>
-          </div>
-
-          <div className="mt-20 px-6">
-            <div className="flex w-full justify-between">
-              <div className="flex flex-col items-start gap-">
-                <h2 className="text-2xl font-bold">{formData.username}</h2>
-                <p>{formData.email}</p>
-              </div>
-
-              <button>Edit Profile | Follow</button>
-            </div>
-
-            <p className="mt-5 font-semibold">{formData.bio}</p>
-          </div>
-
-          <div className="w-full mt-10 border-t border-black/30">
-            {" "}
-            {posts.map((post) => (
-              <div key={post.id} className="border p-4 rounded">
-                <h3 className="font-bold">{post.title}</h3>
-                <p className="text-sm text-black">
-                  {new Date(post.created_at).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* <form
+        
+        <form
           onSubmit={handleSubmit}
           className="space-y-4 flex flex-col items-start px-6"
         >
@@ -274,7 +225,7 @@ export default function EditProfilePage() {
           >
             Save Changes
           </button>
-        </form> */}
+        </form>
       </div>
       <div>b</div>
     </div>
