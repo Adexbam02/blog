@@ -5,7 +5,7 @@ const { author } = req.params;
 
   try {
     const posts = db
-      .prepare("SELECT * FROM posts WHERE author = ?  ORDER BY created_at DESC")
+      .prepare("SELECT * FROM posts WHERE author = ? COLLATE NOCASE ORDER BY created_at DESC")
       .all(author);
     res.status(200).json(posts);
   } catch (error) {

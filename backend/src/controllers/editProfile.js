@@ -2,15 +2,28 @@ import db from "../db.js";
 
 export const editProfile = (req, res) => {
   const { username } = req.user; // assuming you use JWT auth middleware
-  const { bio, email, profile_picture_url } = req.body;
+  const {
+    username: newUsername,
+    bio,
+    email,
+    profile_picture_url,
+    banner_picture_url,
+  } = req.body;
 
   try {
     const query = db.prepare(`
       UPDATE users 
-      SET  bio = ?, email = ?, profile_picture_url = ?
+      SET username = ?, bio = ?, email = ?, profile_picture_url = ?, banner_picture_url = ?
       WHERE username = ?
     `);
-    const result = query.run( bio, email, profile_picture_url, username);
+    const result = query.run(
+      newUsername,
+      bio,
+      email,
+      profile_picture_url,
+      banner_picture_url,
+      username,
+    );
 
     if (result.changes === 0)
       return res.status(404).json({ message: "User not found" });

@@ -6,7 +6,7 @@ export const getUserProfilePublic = (req, res) => {
 
     // Fetch user
     const user = db.prepare(`
-      SELECT id, username, email, bio, profile_picture_url
+      SELECT id, username, email, bio, profile_picture_url, banner_picture_url
       FROM users
       WHERE LOWER(username) = LOWER(?)
     `).get(username);
@@ -47,6 +47,7 @@ export const getUserProfilePublic = (req, res) => {
       email: user.email,
       bio: user.bio,
       profile_picture_url: user.profile_picture_url,
+      banner_picture_url: user.banner_picture_url,
       followers,
       following,
       isFollowing

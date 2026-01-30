@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Providers } from "./providers";
+// import { Providers } from "./providers";
 import {
   Geist,
   Geist_Mono,
@@ -33,7 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${workSans.variable} antialiased bg-[242535]`}>
         {/* <Navbar /> */}
-      <Providers>{children}</Providers>
+      {children}
       </body>
     </html>
   );

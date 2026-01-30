@@ -6,7 +6,7 @@ const modules = {
     [{ list: "ordered" }],
     ["blockquote", "code-block"],
     [{ color: [] }, { background: [] }],
-    ["link"],
+    ['link', 'image'],
     ["clean"],
   ],
 };

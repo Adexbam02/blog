@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 type UserProfile = {
   username: string;
   email: string;
   bio: string | null;
   profile_picture_url: string | null;
+  banner_picture_url: string | null;
   posts: {
     id: number;
     slug: string;
@@ -53,66 +55,92 @@ export default function UserProfilePage() {
     return <p className="text-center mt-10 text-red-500">User not found</p>;
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4">
-      {/* Profile Section */}
-      <div className="flex items-center gap-6">
-        <div className="w-32 h-32 rounded-md border-3 border-gray-400 overflow-hidden bg-gray-200 flex shrink-0">
-          <Image
-            src={profile.profile_picture_url || "/imgs/user.png"}
-            alt={profile.username}
-            width={130}
-            height={130}
-            className="object-cover "
-          />
-        </div>
-
+    <div className="grid grid-cols-4">
+      <div>a</div>
+      <div className="w-full mx-auo mt10  bg-blac col-span-2 border-x border-black/30 min-h-screen">
         <div>
-          <h1 className="text-3xl font-bold text-white">{profile.username}</h1>
-          <p className="text-gray-500">{profile.email}</p>
-          {profile.bio && <p className="mt-2 text-white/50">{profile.bio}</p>}
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div className="h-px bg-gray-300 my-10" />
-
-     
-
-      {profile.posts.length === 0 ? (
-        <p className="text-gray-500">No posts yet.</p>
-      ) : (
-        <div className="space-y-6">
-          {profile.posts.map((post) => (
-            <a
-              key={post.id}
-              href={`/${profile.username}/${post.slug}`}
-              className=" p-5 border-b border-gray-300 flex flex-row-reverse justify-between"
-            >
-              {post.img_url && (
-                <div className="w-[250px] h-[150px] shrink-0 overflow-hidden mb-3">
-                  <Image
-                    src={post.img_url}
-                    alt={post.title}
-                    width={600}
-                    height={400}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
+          <div className="flex flex-col relative">
+            <div className="w-full h-[200px] relative bg-black">
+              {profile.banner_picture_url && (
+                <Image
+                  src={profile.banner_picture_url}
+                  alt="Banner"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               )}
+            </div>
 
-              <div className="flex flex-col items-start gap-5">
-                <h3 className="text-[30px] leading-[120%] text-wrap text-white font-semibold">
-                  {post.title}
-                </h3>
-                <p className="text-gray-500 text-sm">
-                  {new Date(post.created_at).toLocaleDateString()}
-                </p>
-                <p className="mt-1 p-1 bg-white rounded text-sm font-medium">{post.category}</p>
+            <div className="w-[135px] h-[135px] rounded-md border-2 border-black/30 absolute left-6 bottom-[-60px] bg-black overflow-hidden ">
+              <Image
+                src={profile.profile_picture_url || "/default-profile.png"}
+                alt="Profile Picture"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+          </div>
+
+          <div className="mt-20 px-6">
+            <div className="flex w-full justify-between">
+              <div className="flex flex-col items-start gap-">
+                <h2 className="text-2xl font-bold">{profile.username}</h2>
+                <p>{profile.email}</p>
               </div>
-            </a>
-          ))}
+
+              <button>Edit Profile | Follow</button>
+            </div>
+
+            <p className="my-5 font-semibold">{profile.bio}</p>
+          </div>
         </div>
-      )}
+
+        <div className="flex items-center gap-6"></div>
+
+        {/* Divider */}
+        <div className="h-px bg-gray-300 my10" />
+
+        {profile.posts.length === 0 ? (
+          <p className="text-gray-500">No posts yet.</p>
+        ) : (
+          <div className="">
+            {profile.posts.map((post) => (
+              <Link
+                key={post.id}
+                href={`/${profile.username}/${post.slug}`}
+                className="w-full p-5 border-b border-black/30 flex flex-row-reverse justify-between"
+              >
+                {post.img_url && (
+                  <div className="w-[30%] h-[130px] shrink-0 overflow-hidden mb-3">
+                    <Image
+                      src={post.img_url}
+                      alt={post.title}
+                      width={600}
+                      height={400}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
+
+                <div className="flex flex-col items-start gap-5">
+                  <h3 className="text-[30px] leading-[120%] text-wrap  font-semibold">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm">
+                    {new Date(post.created_at).toLocaleDateString()}
+                  </p>
+                  <p className="mt-1 p-1 bg-white rounded text-sm font-medium">
+                    {post.category}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+      <div>b</div>
     </div>
   );
 }

@@ -19,7 +19,8 @@ import { postView } from "../controllers/postViews.js";
 import { getViewCount } from "../controllers/getViewCount.js";
 import { optionalAuth } from "../middleware/optionalAuth.js";
 import { getUserTotalViewsInLastOneHr } from "../controllers/getUserViewGrowthToday.js";
-import { draftedPost } from "../controllers/draftedPost.js";
+import { getAllPostsByAuthorId } from "../controllers/getPostByUserId.js";
+// import { draftedPost } from "../controllers/draftedPost.js";
 
 const router = express.Router();
 
@@ -57,7 +58,7 @@ router.delete("/comment/:commentId", authenticateToken, deleteComment);
 router.post("/views/:postId", optionalAuth, postView);
 router.get("/views/:postId", getViewCount);
 
-router.put("/draft", authenticateToken, draftedPost);
+// router.put("/draft", authenticateToken, draftedPost);
 // router.get("/views/:userId", getUserTotalViews);
 // router.get("/views/growth/:postId", getUserTotalViewsInLastOneHr);
 
@@ -77,6 +78,8 @@ router.get("/:username", (req, res) => {
 
 // Get all posts by author (already generic)
 router.get("/:author", getAllPostsByAuthor);
+// Get all posts by author (already generic)
+router.get("/id/:id", getAllPostsByAuthorId);
 
 // Get post by author and slug (most generic - must be last)
 router.get("/:author/:slug", getPostBySlug);

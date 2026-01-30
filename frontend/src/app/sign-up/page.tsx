@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import AuthButtons from "@/components/AuthButtons";
 
 function page() {
   const route = useRouter();
@@ -88,7 +87,6 @@ function page() {
         </button>
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </form>
-      <AuthButtons />
     </div>
   );
 }

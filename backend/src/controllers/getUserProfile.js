@@ -6,7 +6,7 @@ export const getUserProfile = (req, res) => {
 
     // Fetch user info
     const userQuery = db.prepare(`
-      SELECT id, username, email, bio, profile_picture_url
+      SELECT id, username, email, bio, profile_picture_url, banner_picture_url
       FROM users
       WHERE LOWER(username) = LOWER(?)
     `);
