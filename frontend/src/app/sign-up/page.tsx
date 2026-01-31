@@ -52,7 +52,7 @@ function page() {
       >
         <input
           onChange={(e) =>
-            setFormData({ ...formData, username: e.target.value })
+            setFormData({ ...formData, username: e.target.value.trim() })
           }
           type="text"
           name="username"
@@ -61,7 +61,7 @@ function page() {
           className=" outline-none bg-[#181A2A] p-[5px] rounded-[6px] text-white"
         />
         <input
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value.trim() })}
           type="email"
           name="email"
           placeholder="Email"

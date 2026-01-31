@@ -14,17 +14,19 @@ export const getCommentsByPostId = (req, res) => {
         `SELECT c.id, c.user_id, c.content, c.created_at, u.username, u.profile_picture_url
        FROM comments c
        JOIN users u ON c.user_id = u.id
-       WHERE c.post_id = ? ORDER BY c.created_at DESC`
+       WHERE c.post_id = ? ORDER BY c.created_at DESC`,
       )
       .all(postId);
 
-    res.json(comments);
+    res.json({
+      comments,
+      count: comments.length,
+    });
   } catch (error) {
     console.error("Failed to retrieve comments:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 // export const getCommentsByPostId = (req, res) => {
 //   const { postId } = req.params;
